@@ -1,0 +1,141 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Advanced Car Customization App</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        text-align: center;
+      }
+
+      .car-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 300px;
+        margin: 20px;
+        position: relative;
+      }
+
+      .car {
+        width: 200px;
+        height: 100px;
+        background-color: #3498db;
+        position: relative;
+      }
+
+      .wheel {
+        width: 30px;
+        height: 30px;
+        background-color: #333;
+        border-radius: 50%;
+        position: absolute;
+        bottom: 0;
+        transform: translateX(-50%);
+      }
+
+      .spoiler {
+        width: 120px;
+        height: 20px;
+        background-color: #333;
+        position: absolute;
+        top: -20px;
+        left: 50%;
+        transform: translateX(-50%);
+      }
+
+      #options-container {
+        margin-top: 20px;
+      }
+
+      .options {
+        margin: 0 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="car-container">
+      <div id="car" class="car">
+        <div class="wheel" id="leftWheel"></div>
+        <div class="wheel" id="rightWheel"></div>
+        <div class="spoiler" id="carSpoiler"></div>
+      </div>
+    </div>
+
+    <div id="options-container">
+      <label for="carModel" class="options">Choose car model:</label>
+      <select id="carModel" class="options">
+        <option value="sedan">Sedan</option>
+        <option value="hatchback">Hatchback</option>
+        <option value="suv">SUV</option>
+      </select>
+
+      <label for="colorInput" class="options">Choose car color:</label>
+      <input type="color" id="colorInput" class="options" value="#3498db" />
+
+      <label for="wheelColorInput" class="options">Choose wheel color:</label>
+      <input type="color" id="wheelColorInput" class="options" value="#333" />
+
+      <label for="spoilerCheckbox" class="options">Add spoiler:</label>
+      <input type="checkbox" id="spoilerCheckbox" class="options" />
+
+      <button onclick="applyCustomization()" class="options">
+        Apply Customization
+      </button>
+    </div>
+
+    <script>
+      // Load user preferences from localStorage
+      const savedPreferences =
+        JSON.parse(localStorage.getItem('carCustomization')) || {};
+      document.getElementById('carModel').value =
+        savedPreferences.carModel || 'sedan';
+      document.getElementById('colorInput').value =
+        savedPreferences.carColor || '#3498db';
+      document.getElementById('wheelColorInput').value =
+        savedPreferences.wheelColor || '#333';
+      document.getElementById('spoilerCheckbox').checked =
+        savedPreferences.hasSpoiler || false;
+
+      // Apply customization based on user preferences
+      applyCustomization();
+
+      function applyCustomization() {
+        const carModel = document.getElementById('carModel').value;
+        const carColor = document.getElementById('colorInput').value;
+        const wheelColor = document.getElementById('wheelColorInput').value;
+        const hasSpoiler = document.getElementById('spoilerCheckbox').checked;
+
+        // Apply car model
+        document.getElementById('car').style.height =
+          carModel === 'suv' ? '120px' : '100px';
+
+        // Apply car color
+        document.getElementById('car').style.backgroundColor = carColor;
+
+        // Apply wheel color
+        document.getElementById('leftWheel').style.backgroundColor = wheelColor;
+        document.getElementById('rightWheel').style.backgroundColor =
+          wheelColor;
+
+        // Apply spoiler
+        document.getElementById('carSpoiler').style.display = hasSpoiler
+          ? 'block'
+          : 'none';
+
+        // Save user preferences to localStorage
+        const userPreferences = {
+          carModel,
+          carColor,
+          wheelColor,
+          hasSpoiler,
+        };
+        localStorage.setItem(
+          'carCustomization',
+          JSON.stringify(userPreferences)
+        );
+      }
+    </script>
+  </body>
+</html>
